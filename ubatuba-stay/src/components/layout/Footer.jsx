@@ -21,12 +21,11 @@ export function Footer() {
       <Container>
         <div className="grid gap-12 border-b border-border-inverse pb-12 md:grid-cols-[1.2fr_1fr_1fr]">
           <div>
-            <a href="#topo" className="mb-5 flex items-center gap-3" aria-label="Ubatuba Stay — início">
-              <Logo inverse />
-              <span className="text-[12px] tracking-nav text-on-inverse">UBATUBA STAY</span>
+            <a href="#topo" className="mb-5 inline-flex w-[176px] sm:w-[192px]" aria-label="Ubatuba Stay - início">
+              <Logo inverse className="w-full" />
             </a>
             <p className="max-w-[36ch] text-0 text-inverse-secondary">
-              Gestão de hospedagens e co-hosting para imóveis por temporada em Ubatuba — da
+              Gestão de hospedagens e co-hosting para imóveis por temporada em Ubatuba - da
               apresentação à operação, com transparência para o proprietário.
             </p>
           </div>

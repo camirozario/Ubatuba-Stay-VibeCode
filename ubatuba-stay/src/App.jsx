@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { Hero } from './components/sections/Hero';
@@ -11,18 +12,34 @@ import { Testimonials } from './components/sections/Testimonials';
 import { Principles } from './components/sections/Principles';
 import { FAQ } from './components/sections/FAQ';
 import { Contact } from './components/sections/Contact';
+import { PageLoader } from './components/ui/PageLoader';
 
 export default function App() {
+  const headerLogoTargetRef = useRef(null);
+  const [showLoader, setShowLoader] = useState(true);
+  const [headerBrandReady, setHeaderBrandReady] = useState(false);
+
   return (
     <>
       <a href="#conteudo" className="skip-link">
         Pular para o conteúdo
       </a>
 
-      <Header />
+      <Header brandTargetRef={headerLogoTargetRef} brandVisible={headerBrandReady || !showLoader} />
+
+      {showLoader ? (
+        <PageLoader
+          targetRef={headerLogoTargetRef}
+          onDock={() => setHeaderBrandReady(true)}
+          onComplete={() => {
+            setHeaderBrandReady(true);
+            setShowLoader(false);
+          }}
+        />
+      ) : null}
 
       <main id="conteudo">
-        <Hero />
+        <Hero contentReady={!showLoader} />
         <Philosophy />
         <Services />
         <Photography />

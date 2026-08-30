@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Logo } from '../ui/Logo';
+import { BrandLockup } from '../ui/Logo';
 import { Button } from '../ui/Button';
 import { Container } from './Container';
 import { cn } from '../../utils/cn';
@@ -12,13 +12,7 @@ const NAV_LINKS = [
   { href: '#faq', label: 'Perguntas' },
 ];
 
-/**
- * Header fixo. Começa transparente/invertido sobre a fotografia do hero
- * (nav--over-image) e assume o fundo cream com a primeira rolagem —
- * exatamente o comportamento descrito no design system para navegação
- * sobre imagem.
- */
-export function Header() {
+export function Header({ brandTargetRef = null, brandVisible = true }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const tickingRef = useRef(false);
@@ -27,11 +21,13 @@ export function Header() {
     const onScroll = () => {
       if (tickingRef.current) return;
       tickingRef.current = true;
+
       window.requestAnimationFrame(() => {
         setScrolled(window.scrollY > window.innerHeight * 0.72);
         tickingRef.current = false;
       });
     };
+
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -39,6 +35,7 @@ export function Header() {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
+
     return () => {
       document.body.style.overflow = '';
     };
@@ -56,15 +53,20 @@ export function Header() {
       )}
     >
       <Container className="flex h-full items-center justify-between gap-7">
-        <a href="#topo" className="flex items-center gap-3" aria-label="Ubatuba Stay — início">
-          <Logo inverse={overImage && !menuOpen} />
+        <a href="#topo" className="flex shrink-0 items-center" aria-label="Ubatuba Stay - início">
           <span
             className={cn(
-              'text-[12px] tracking-nav',
-              overImage && !menuOpen ? 'text-on-inverse' : 'text-text'
+              'inline-flex shrink-0 items-center transition-opacity duration-fast',
+              brandVisible ? 'opacity-100' : 'opacity-0'
             )}
           >
-            UBATUBA STAY
+            <BrandLockup
+              inverse={overImage && !menuOpen}
+              className="gap-2 sm:gap-2.5"
+              markClassName="w-[48px] sm:w-[52px]"
+              wordmarkClassName="text-[0.7rem] sm:text-[0.76rem]"
+              markRef={brandTargetRef}
+            />
           </span>
         </a>
 
@@ -91,7 +93,7 @@ export function Header() {
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
-          onClick={() => setMenuOpen((v) => !v)}
+          onClick={() => setMenuOpen((value) => !value)}
         >
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>

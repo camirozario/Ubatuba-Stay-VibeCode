@@ -12,6 +12,18 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap');
 
+@font-face {
+  font-family: 'Mundial Hair';
+  src: url('./assets/fonts/mundial-hair-demo.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mundial Regular';
+  src: url('./assets/fonts/mundial-regular-demo.otf') format('opentype');
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -78,6 +90,8 @@
   /* ---------- Type ---------- */
   --font-sans: 'Hanken Grotesk', 'Questrial', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  --font-logo-hair: 'Mundial Hair', 'Hanken Grotesk', sans-serif;
+  --font-logo-regular: 'Mundial Regular', 'Hanken Grotesk', sans-serif;
 
   --step--1: 0.8125rem;
   --step-0: 1rem;
@@ -330,6 +344,24 @@
     background: #ffffff;
   }
 
+  .hero__cta-primary {
+    border-color: rgba(232, 132, 92, 0.24);
+    box-shadow: 0 12px 28px rgba(14, 44, 54, 0.18);
+    transition:
+      background var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      transform var(--dur-fast) var(--ease),
+      box-shadow var(--dur) var(--ease);
+  }
+  .hero__cta-primary:hover {
+    background: var(--ub-mare);
+    color: var(--ink-950);
+    border-color: rgba(232, 132, 92, 0.7);
+    box-shadow: 0 18px 40px rgba(232, 132, 92, 0.28);
+    transform: translateY(-2px);
+  }
+
   .btn--ghost {
     background: transparent;
     color: var(--text);
@@ -491,6 +523,82 @@
     overflow: hidden;
   }
 
+  .brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .brand-lockup__mark {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .brand-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .brand-mark {
+    overflow: visible;
+  }
+  .brand-logo__line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .brand-logo__sun {
+    opacity: 1;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .brand-logo__wordmark {
+    opacity: 1;
+  }
+  .brand-logo__wordmark--compact {
+    paint-order: stroke fill;
+    stroke: currentColor;
+    stroke-width: 0.26px;
+    stroke-linejoin: round;
+  }
+  .brand-logo__hair {
+    font-family: var(--font-logo-hair);
+    letter-spacing: 0.22em;
+  }
+  .brand-logo__regular {
+    font-family: var(--font-logo-regular);
+    letter-spacing: 0.22em;
+  }
+  .brand-wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.34rem;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transform: translateY(1px);
+  }
+  .brand-wordmark__hair {
+    font-family: var(--font-logo-hair);
+  }
+  .brand-wordmark__regular {
+    font-family: var(--font-logo-regular);
+  }
+  .brand-logo--animated .brand-logo__line {
+    stroke-dashoffset: 1;
+    animation: brand-logo-draw 2200ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  .brand-logo--animated .brand-logo__sun {
+    opacity: 0;
+    transform: scale(0) rotate(-18deg);
+    animation: brand-logo-sun 800ms cubic-bezier(0.2, 0.9, 0.3, 1.25) 1850ms forwards;
+  }
+  .brand-logo--animated .brand-logo__wordmark {
+    opacity: 0;
+    animation: brand-logo-wordmark 1150ms cubic-bezier(0.22, 1, 0.36, 1) 2550ms forwards;
+  }
+
   .spec-row {
     display: flex;
     align-items: baseline;
@@ -585,6 +693,15 @@
       transform: none;
       transition: none;
     }
+
+    .brand-logo--animated .brand-logo__line,
+    .brand-logo--animated .brand-logo__sun,
+    .brand-logo--animated .brand-logo__wordmark {
+      animation: none;
+      opacity: 1;
+      stroke-dashoffset: 0;
+      transform: none;
+    }
   }
 
   /* Horizontal scrollbar hidden for swipeable mobile galleries */
@@ -594,5 +711,38 @@
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@keyframes brand-logo-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes brand-logo-sun {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-18deg);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.08) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes brand-logo-wordmark {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
