@@ -2,9 +2,13 @@ import { useEffect, useRef } from 'react';
 import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
 const DESKTOP_MEDIA_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fine)';
+const TALL_DESKTOP_MEDIA_QUERY =
+  '(min-width: 1024px) and (min-height: 940px) and (hover: hover) and (pointer: fine)';
 const SECTION_SCROLL_DURATION_MS = 900;
 const SECTION_SCROLL_COOLDOWN_MS = 140;
 const WHEEL_DELTA_THRESHOLD = 10;
+const WHEEL_GESTURE_THRESHOLD = 56;
+const WHEEL_GESTURE_RESET_MS = 180;
 const SECTION_BOUNDARY_THRESHOLD = 24;
 const SECTION_OVERFLOW_TOLERANCE = 96;
 const SECTION_OVERFLOW_RATIO = 0.18;
@@ -73,12 +77,6 @@ function getSectionTop(section) {
 
 function getSectionCenter(section) {
   return getSectionTop(section) + section.offsetHeight * 0.5;
-}
-
-function getWheelDirection(event) {
-  if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) return 0;
-  if (Math.abs(event.deltaY) < WHEEL_DELTA_THRESHOLD) return 0;
-  return event.deltaY > 0 ? 1 : -1;
 }
 
 function isNativeScrollSection(section) {
@@ -162,6 +160,8 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
   const activeIndexRef = useRef(0);
   const animationFrameRef = useRef(0);
   const cooldownTimeoutRef = useRef(0);
+  const wheelGestureTimeoutRef = useRef(0);
+  const wheelDeltaAccumulatorRef = useRef(0);
   const isAnimatingRef = useRef(false);
 
   useEffect(() => {
@@ -174,8 +174,15 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
     const html = document.documentElement;
     const body = document.body;
     const desktopMedia = window.matchMedia(DESKTOP_MEDIA_QUERY);
+    const tallDesktopMedia = window.matchMedia(TALL_DESKTOP_MEDIA_QUERY);
     let sections = [];
     let sectionObserver = null;
+
+    const resetWheelGesture = () => {
+      window.clearTimeout(wheelGestureTimeoutRef.current);
+      wheelGestureTimeoutRef.current = 0;
+      wheelDeltaAccumulatorRef.current = 0;
+    };
 
     const collectSections = () => {
       sections = Array.from(deck.children).filter((child) =>
@@ -234,6 +241,7 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
     const clearAnimationState = () => {
       window.cancelAnimationFrame(animationFrameRef.current);
       window.clearTimeout(cooldownTimeoutRef.current);
+      resetWheelGesture();
       html.classList.remove('homepage-snap--animating');
       body.classList.remove('homepage-snap--animating');
       clearSectionTransitionState();
@@ -248,6 +256,11 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
     const handleResize = () => {
       collectSections();
       updateActiveSectionFromViewport();
+    };
+
+    const syncTallDesktopState = () => {
+      html.classList.toggle('homepage-tall-desktop', tallDesktopMedia.matches);
+      body.classList.toggle('homepage-tall-desktop', tallDesktopMedia.matches);
     };
 
     const stopDesktopEnhancement = () => {
@@ -315,9 +328,19 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
     const handleWheel = (event) => {
       if (!desktopMedia.matches) return;
       if (body.style.overflow === 'hidden') return;
+      if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
+      if (Math.abs(event.deltaY) < WHEEL_DELTA_THRESHOLD) return;
 
-      const direction = getWheelDirection(event);
-      if (!direction) return;
+      wheelDeltaAccumulatorRef.current += event.deltaY;
+      window.clearTimeout(wheelGestureTimeoutRef.current);
+      wheelGestureTimeoutRef.current = window.setTimeout(() => {
+        wheelDeltaAccumulatorRef.current = 0;
+      }, WHEEL_GESTURE_RESET_MS);
+
+      if (Math.abs(wheelDeltaAccumulatorRef.current) < WHEEL_GESTURE_THRESHOLD) return;
+
+      const direction = wheelDeltaAccumulatorRef.current > 0 ? 1 : -1;
+      resetWheelGesture();
 
       const currentSections = collectSections();
       if (currentSections.length < 2) return;
@@ -330,6 +353,7 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
 
       const scrollableAncestor = findScrollableAncestor(event.target);
       if (scrollableAncestor && canScrollWithinElement(scrollableAncestor, direction)) {
+        resetWheelGesture();
         return;
       }
 
@@ -341,15 +365,20 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
         event.target instanceof Element ? event.target.closest('.story-deck__panel') : null;
 
       if (isNativeScrollSection(targetSection) || isNativeScrollSection(currentSection)) {
+        resetWheelGesture();
         return;
       }
 
       if (canContinueWithinSection(currentSection, direction)) {
+        resetWheelGesture();
         return;
       }
 
       const targetIndex = clamp(currentIndex + direction, 0, currentSections.length - 1);
-      if (targetIndex === currentIndex) return;
+      if (targetIndex === currentIndex) {
+        resetWheelGesture();
+        return;
+      }
 
       event.preventDefault();
       animateToSection(currentIndex, targetIndex, direction);
@@ -395,8 +424,9 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
       stopDesktopEnhancement();
       html.classList.remove('homepage-snap');
       body.classList.remove('homepage-snap');
+      syncTallDesktopState();
 
-      if (prefersReducedMotion) return;
+      if (prefersReducedMotion || tallDesktopMedia.matches) return;
 
       html.classList.add('homepage-snap');
       body.classList.add('homepage-snap');
@@ -408,12 +438,17 @@ export function useHomepageSectionScroll(deckRef, { enabled = true } = {}) {
 
     syncMode();
     desktopMedia.addEventListener('change', syncMode);
+    tallDesktopMedia.addEventListener('change', syncMode);
 
     return () => {
       desktopMedia.removeEventListener('change', syncMode);
+      tallDesktopMedia.removeEventListener('change', syncMode);
       stopDesktopEnhancement();
+      resetWheelGesture();
       html.classList.remove('homepage-snap');
       body.classList.remove('homepage-snap');
+      html.classList.remove('homepage-tall-desktop');
+      body.classList.remove('homepage-tall-desktop');
     };
   }, [deckRef, enabled, prefersReducedMotion]);
 }

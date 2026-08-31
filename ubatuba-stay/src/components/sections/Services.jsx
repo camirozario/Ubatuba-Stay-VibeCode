@@ -8,7 +8,9 @@ import { Section } from '../layout/Section';
 const DESKTOP_MEDIA_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fine)';
 const SNAP_DURATION_MS = 860;
 const SNAP_COOLDOWN_MS = 140;
-const WHEEL_DELTA_THRESHOLD = 10;
+const WHEEL_DELTA_THRESHOLD = 2;
+const WHEEL_GESTURE_THRESHOLD = 18;
+const WHEEL_GESTURE_RESET_MS = 160;
 const SECTION_CONTROL_MARGIN = 0.18;
 
 function clamp(value, min, max) {
@@ -68,12 +70,6 @@ function createBezierEasing(x1, y1, x2, y2) {
 }
 
 const EDITORIAL_EASE = createBezierEasing(0.76, 0, 0.24, 1);
-
-function getWheelDirection(event) {
-  if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) return 0;
-  if (Math.abs(event.deltaY) < WHEEL_DELTA_THRESHOLD) return 0;
-  return event.deltaY > 0 ? 1 : -1;
-}
 
 function getSectionTop(section) {
   return section.getBoundingClientRect().top + window.scrollY;
@@ -181,6 +177,8 @@ export function Services() {
   const activeIndexRef = useRef(0);
   const animationFrameRef = useRef(0);
   const cooldownTimeoutRef = useRef(0);
+  const wheelGestureTimeoutRef = useRef(0);
+  const wheelDeltaAccumulatorRef = useRef(0);
   const isAnimatingRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const panelRefs = useRef([]);
@@ -206,9 +204,16 @@ export function Services() {
       }, SNAP_COOLDOWN_MS);
     };
 
+    const resetWheelGesture = () => {
+      window.clearTimeout(wheelGestureTimeoutRef.current);
+      wheelGestureTimeoutRef.current = 0;
+      wheelDeltaAccumulatorRef.current = 0;
+    };
+
     const clearAnimationState = () => {
       window.cancelAnimationFrame(animationFrameRef.current);
       window.clearTimeout(cooldownTimeoutRef.current);
+      resetWheelGesture();
       isAnimatingRef.current = false;
     };
 
@@ -275,9 +280,6 @@ export function Services() {
 
     const handleWheel = (event) => {
       if (!desktopMedia.matches || prefersReducedMotion) return;
-
-      const direction = getWheelDirection(event);
-      if (!direction) return;
       if (!isSectionInControl(section)) return;
 
       const eventTarget = event.target instanceof Element ? event.target : null;
@@ -287,6 +289,18 @@ export function Services() {
         event.preventDefault();
         return;
       }
+
+      if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
+      if (Math.abs(event.deltaY) < WHEEL_DELTA_THRESHOLD) return;
+
+      wheelDeltaAccumulatorRef.current += event.deltaY;
+      window.clearTimeout(wheelGestureTimeoutRef.current);
+      wheelGestureTimeoutRef.current = window.setTimeout(resetWheelGesture, WHEEL_GESTURE_RESET_MS);
+
+      if (Math.abs(wheelDeltaAccumulatorRef.current) < WHEEL_GESTURE_THRESHOLD) return;
+
+      const direction = wheelDeltaAccumulatorRef.current > 0 ? 1 : -1;
+      resetWheelGesture();
 
       const nextIndex = activeIndexRef.current + direction;
 

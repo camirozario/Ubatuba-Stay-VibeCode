@@ -126,6 +126,7 @@
   --container: 1440px;
   --gutter: clamp(20px, 5vw, 64px);
   --nav-h: 72px;
+  --story-panel-relaxed-height: clamp(42rem, 82svh, 56rem);
 
   /* ---------- Radii ---------- */
   --r-xs: 4px;
@@ -314,6 +315,8 @@
     position: relative;
     min-height: 100svh;
     isolation: isolate;
+    perspective: 1800px;
+    perspective-origin: 50% 50%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
@@ -321,6 +324,8 @@
   .story-deck__surface {
     position: relative;
     transform: translate3d(0, 0, 0);
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
     opacity: 1;
   }
 
@@ -333,13 +338,13 @@
   }
 
   body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface {
-    transform: translate3d(0, -28px, 0);
-    opacity: 0.78;
+    transform: translate3d(0, -34px, 0) scale(0.986) rotateX(-10deg);
+    opacity: 0.58;
   }
 
   body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface {
-    transform: translate3d(0, 20px, 0);
-    opacity: 0.84;
+    transform: translate3d(0, 30px, 0) scale(0.988) rotateX(10deg);
+    opacity: 0.64;
   }
 
   body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface {
@@ -767,7 +772,8 @@
     }
 
     .services-panel__media {
-      max-height: min(100%, 24rem);
+      height: clamp(24rem, 46vh, 32rem);
+      max-height: calc(100svh - var(--nav-h) - 10rem);
     }
   }
 
@@ -1150,6 +1156,46 @@
   }
 }
 
+@layer utilities {
+  html.homepage-tall-desktop,
+  body.homepage-tall-desktop {
+    scroll-snap-type: none;
+  }
+
+  body.homepage-tall-desktop {
+    --section-y: clamp(56px, 5vw, 88px);
+  }
+
+  body.homepage-tall-desktop .story-deck__panel {
+    min-height: var(--story-panel-relaxed-height);
+  }
+
+  body.homepage-tall-desktop #topo {
+    height: auto;
+    min-height: max(560px, var(--story-panel-relaxed-height));
+  }
+
+  body.homepage-tall-desktop #sobre .story-deck__surface {
+    min-height: var(--story-panel-relaxed-height);
+  }
+
+  body.homepage-tall-desktop #fotografia .section {
+    height: auto;
+    min-height: var(--story-panel-relaxed-height);
+  }
+
+  body.homepage-tall-desktop .services-section {
+    height: auto;
+    min-height: var(--story-panel-relaxed-height);
+  }
+
+  body.homepage-tall-desktop .services-section .story-deck__surface {
+    min-height: calc(
+      var(--story-panel-relaxed-height) - var(--services-section-pad-top) - var(--services-section-pad-bottom)
+    );
+  }
+}
+
 @keyframes brand-logo-draw {
   from {
     stroke-dashoffset: 1;
@@ -1161,8 +1207,8 @@
 
 @keyframes story-deck-enter-from-below {
   from {
-    transform: translate3d(0, 24px, 0);
-    opacity: 0.86;
+    transform: translate3d(0, 64px, 0) scale(0.974) rotateX(14deg);
+    opacity: 0.18;
   }
   to {
     transform: translate3d(0, 0, 0);
@@ -1172,8 +1218,8 @@
 
 @keyframes story-deck-enter-from-above {
   from {
-    transform: translate3d(0, -18px, 0);
-    opacity: 0.9;
+    transform: translate3d(0, -58px, 0) scale(0.978) rotateX(-14deg);
+    opacity: 0.2;
   }
   to {
     transform: translate3d(0, 0, 0);
