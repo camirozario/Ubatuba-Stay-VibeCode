@@ -1,39 +1,109 @@
-import { philosophyImage } from '../../data/images';
-import { Eyebrow } from '../ui/Eyebrow';
-import { Media } from '../ui/Media';
-import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { useEffect, useState } from 'react';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { Section } from '../layout/Section';
 
-/**
- * 02 — Mais do que co-hosting.
- * Composição assimétrica: texto editorial de um lado, fotografia grande
- * ultrapassando a coluna do outro. Sem cards — a lista de elementos vira
- * uma linha corrida, não uma grade.
- */
+const ROTATING_PHRASES = [
+  'apresentações impecáveis',
+  'uma experiência em um único aplicativo',
+  'fotografias que transformam estadias em desejo',
+  'hospitalidade pensada nos detalhes',
+  'gestão que valoriza cada imóvel',
+  'experiências que começam antes do check-in',
+  'seu imóvel, apresentado como ele merece',
+  'cada detalhe pensado para receber melhor',
+  'mais cuidado. mais valor. mais experiência.',
+];
+
+const HOLD_DURATION_MS = 2600;
+const ROLL_DURATION_MS = 1100;
+const ROLL_DISTANCE = '116%';
+const LONGEST_PHRASE = ROTATING_PHRASES.reduce((longest, phrase) => (
+  phrase.length > longest.length ? phrase : longest
+), ROTATING_PHRASES[0]);
+
+function getNextIndex(index) {
+  return (index + 1) % ROTATING_PHRASES.length;
+}
+
 export function Philosophy() {
-  const textReveal = useScrollReveal();
-  const imageReveal = useScrollReveal({ threshold: 0.05 });
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState(() => getNextIndex(0));
+  const [isRolling, setIsRolling] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion || isRolling) return undefined;
+
+    const holdTimeout = window.setTimeout(() => {
+      setIsRolling(true);
+    }, HOLD_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(holdTimeout);
+    };
+  }, [currentIndex, isRolling, prefersReducedMotion]);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !isRolling) return undefined;
+
+    const swapTimeout = window.setTimeout(() => {
+      setCurrentIndex(nextIndex);
+      setNextIndex(getNextIndex(nextIndex));
+      setIsRolling(false);
+    }, ROLL_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(swapTimeout);
+    };
+  }, [isRolling, nextIndex, prefersReducedMotion]);
+
+  const currentPhrase = ROTATING_PHRASES[currentIndex];
+  const nextPhrase = ROTATING_PHRASES[nextIndex];
 
   return (
-    <Section id="sobre" bg="sand" className="overflow-hidden">
-      <div className="grid items-center gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-10">
-        <div ref={textReveal} className="reveal lg:order-1 lg:pr-6">
-          <Eyebrow>Mais do que co-hosting</Eyebrow>
-          <h2 className="max-w-[14ch]">Mais do que administrar reservas.</h2>
-          <p className="mt-6 text-1 text-text-secondary">
-            Uma excelente hospedagem é o resultado de vários elementos funcionando juntos:
-            apresentação, limpeza, comunicação, organização, manutenção, operação e atenção ao
-            hóspede. Observamos a experiência de hospedagem por inteiro — não só mensagens e
-            reservas.
-          </p>
-          <p className="quote mt-10 max-w-[22ch]">
-            “Uma boa hospedagem começa muito antes do check-in.”
-          </p>
-        </div>
-
-        <div ref={imageReveal} className="reveal lg:order-2 lg:-mr-[calc(var(--gutter)*1.4)] lg:col-span-1">
-          <Media image={philosophyImage} aspect="4 / 5" className="w-full" />
-        </div>
+    <Section
+      id="sobre"
+      bg="sand"
+      className="relative z-10 overflow-visible py-0"
+      containerClassName="flex min-h-[100svh] items-center justify-center"
+    >
+      <div className="philosophy-transition-target w-full text-center">
+        <p className="philosophy-declaration" aria-label={`Criamos ${currentPhrase}`}>
+          <span aria-hidden="true">Criamos</span>
+          <span className="philosophy-roller" aria-hidden="true">
+            <span className="philosophy-roller__measure">{LONGEST_PHRASE}</span>
+            <span className="philosophy-roller__viewport">
+              {prefersReducedMotion ? (
+                <span className="philosophy-roller__line philosophy-roller__line--static">
+                  {currentPhrase}
+                </span>
+              ) : (
+                <>
+                  <span
+                    key={`current-${currentIndex}`}
+                    className="philosophy-roller__line"
+                    style={{
+                      transform: isRolling ? `translateY(-${ROLL_DISTANCE})` : 'translateY(0%)',
+                      opacity: isRolling ? 0 : 1,
+                    }}
+                  >
+                    {currentPhrase}
+                  </span>
+                  <span
+                    key={`next-${nextIndex}`}
+                    className="philosophy-roller__line"
+                    style={{
+                      transform: isRolling ? 'translateY(0%)' : `translateY(${ROLL_DISTANCE})`,
+                      opacity: isRolling ? 1 : 0,
+                    }}
+                  >
+                    {nextPhrase}
+                  </span>
+                </>
+              )}
+            </span>
+          </span>
+        </p>
       </div>
     </Section>
   );

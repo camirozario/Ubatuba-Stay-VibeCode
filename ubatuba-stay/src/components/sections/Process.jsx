@@ -42,7 +42,6 @@ export function Process() {
   return (
     <Section id="processo" bg="sand" className="lg:py-0">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Coluna fixa */}
         <div className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:justify-center lg:py-section-y">
           <Eyebrow>Como funciona</Eyebrow>
           <h2 className="max-w-[16ch]">Do primeiro encontro à primeira reserva.</h2>
@@ -63,7 +62,6 @@ export function Process() {
           </div>
         </div>
 
-        {/* Etapas */}
         <ol className="lg:py-section-y">
           {processSteps.map((step, index) => (
             <li

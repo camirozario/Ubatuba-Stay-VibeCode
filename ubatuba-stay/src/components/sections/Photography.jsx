@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { galleryImages } from '../../data/images';
 import { Eyebrow } from '../ui/Eyebrow';
 import { ensureGsapRegistered } from '../../utils/gsapSetup';
@@ -14,7 +14,7 @@ export function Photography() {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const { gsap, ScrollTrigger } = ensureGsapRegistered();
     const mm = gsap.matchMedia();
 
@@ -26,24 +26,67 @@ export function Photography() {
         const { isDesktop } = context.conditions;
         if (!isDesktop) return undefined;
 
+        const section = sectionRef.current;
         const track = trackRef.current;
-        const distance = track.scrollWidth - window.innerWidth;
-        if (distance <= 0) return undefined;
+        if (!section || !track) return undefined;
 
-        const tween = gsap.to(track, {
-          x: -distance,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: () => `+=${distance}`,
-            scrub: 0.4,
-            pin: true,
-            invalidateOnRefresh: true,
-          },
+        let tween = null;
+        let rebuildFrame = 0;
+
+        const buildScrollStory = () => {
+          tween?.scrollTrigger?.kill();
+          tween?.kill();
+
+          gsap.set(track, { x: 0 });
+
+          const distance = Math.max(track.scrollWidth - section.clientWidth, 0);
+          if (distance <= 0) return;
+
+          tween = gsap.to(track, {
+            x: -distance,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: () => `+=${distance}`,
+              scrub: 0.65,
+              pin: true,
+              anticipatePin: 1,
+              fastScrollEnd: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          ScrollTrigger.refresh();
+        };
+
+        const scheduleBuild = () => {
+          window.cancelAnimationFrame(rebuildFrame);
+          rebuildFrame = window.requestAnimationFrame(buildScrollStory);
+        };
+
+        const images = Array.from(track.querySelectorAll('img'));
+        const onWindowResize = () => scheduleBuild();
+
+        images.forEach((image) => {
+          if (image.complete) return;
+          image.addEventListener('load', scheduleBuild);
+          image.addEventListener('error', scheduleBuild);
         });
 
-        return () => tween.scrollTrigger?.kill();
+        window.addEventListener('resize', onWindowResize, { passive: true });
+        scheduleBuild();
+
+        return () => {
+          window.cancelAnimationFrame(rebuildFrame);
+          window.removeEventListener('resize', onWindowResize);
+          images.forEach((image) => {
+            image.removeEventListener('load', scheduleBuild);
+            image.removeEventListener('error', scheduleBuild);
+          });
+          tween?.scrollTrigger?.kill();
+          tween?.kill();
+        };
       }
     );
 
@@ -51,12 +94,17 @@ export function Photography() {
   }, []);
 
   return (
-    <section id="fotografia" aria-label="Fotografia profissional" className="bg-costa">
-      <div ref={sectionRef} className="relative overflow-hidden">
+    <section
+      id="fotografia"
+      aria-label="Fotografia profissional"
+      data-section-scroll-mode="native"
+      className="story-deck__panel bg-costa"
+    >
+      <div ref={sectionRef} className="story-deck__surface relative overflow-hidden">
         <div className="section pb-8 lg:h-screen lg:pb-0">
           <div className="mx-auto w-full max-w-container px-gutter lg:pt-4">
             <Eyebrow inverse>Fotografia profissional</Eyebrow>
-            <h2 className="max-w-[20ch] text-on-inverse">
+            <h2 className="section-heading--half section-title--white">
               A primeira experiência acontece antes da reserva.
             </h2>
             <p className="mt-6 max-w-[56ch] text-1 text-inverse-secondary">

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { Hero } from './components/sections/Hero';
@@ -13,11 +13,35 @@ import { Principles } from './components/sections/Principles';
 import { FAQ } from './components/sections/FAQ';
 import { Contact } from './components/sections/Contact';
 import { PageLoader } from './components/ui/PageLoader';
+import { useHomepageSectionScroll } from './hooks/useHomepageSectionScroll';
+import { ensureGsapRegistered } from './utils/gsapSetup';
 
 export default function App() {
+  const storyDeckRef = useRef(null);
   const headerLogoTargetRef = useRef(null);
   const [showLoader, setShowLoader] = useState(true);
   const [headerBrandReady, setHeaderBrandReady] = useState(false);
+
+  useHomepageSectionScroll(storyDeckRef, { enabled: !showLoader });
+
+  useEffect(() => {
+    if (showLoader) return undefined;
+
+    const { ScrollTrigger } = ensureGsapRegistered();
+    let frameOne = 0;
+    let frameTwo = 0;
+
+    frameOne = window.requestAnimationFrame(() => {
+      frameTwo = window.requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameOne);
+      window.cancelAnimationFrame(frameTwo);
+    };
+  }, [showLoader]);
 
   return (
     <>
@@ -38,7 +62,7 @@ export default function App() {
         />
       ) : null}
 
-      <main id="conteudo">
+      <main id="conteudo" ref={storyDeckRef} className="story-deck">
         <Hero contentReady={!showLoader} />
         <Philosophy />
         <Services />

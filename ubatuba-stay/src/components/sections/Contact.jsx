@@ -69,7 +69,7 @@ export function Contact() {
       <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
         <div ref={textReveal} className="reveal">
           <Eyebrow>Agendar uma conversa</Eyebrow>
-          <h2 className="max-w-[14ch]">Vamos conversar sobre o seu imóvel?</h2>
+          <h2 className="section-title--column">Vamos conversar sobre o seu imóvel?</h2>
           <p className="mt-6 max-w-[46ch] text-1 text-text-secondary">
             Reserve uma conversa de até uma hora para conhecermos seu imóvel, entender seus
             objetivos e explicar como a Ubatuba Stay pode cuidar da operação.

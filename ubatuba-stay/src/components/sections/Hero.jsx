@@ -4,9 +4,9 @@ import { ensureGsapRegistered, prefersReducedMotion } from '../../utils/gsapSetu
 
 export function Hero({ contentReady = true }) {
   const sectionRef = useRef(null);
-  const mediaRef = useRef(null);
   const mediaFrameRef = useRef(null);
   const videoRef = useRef(null);
+  const contentBlockRef = useRef(null);
   const headlineRef = useRef(null);
   const copyRef = useRef(null);
   const ctasRef = useRef(null);
@@ -14,7 +14,7 @@ export function Hero({ contentReady = true }) {
 
   useEffect(() => {
     const reduced = prefersReducedMotion();
-    const { gsap, ScrollTrigger } = ensureGsapRegistered();
+    const { gsap } = ensureGsapRegistered();
     const ctx = gsap.context(() => {
       if (reduced) {
         gsap.set([mediaFrameRef.current, videoRef.current], {
@@ -57,35 +57,12 @@ export function Hero({ contentReady = true }) {
             { opacity: 1, scale: 1, duration: 1.95, ease: 'power2.out' },
             0.08
           );
+
+        gsap.set(contentBlockRef.current, { yPercent: 0, autoAlpha: 1 });
       }
-
-      gsap.to(mediaRef.current, {
-        yPercent: 8,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-
-      gsap.to(indicatorRef.current, {
-        opacity: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '18% top',
-          scrub: true,
-        },
-      });
     }, sectionRef);
 
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.trigger === sectionRef.current && trigger.kill());
-    };
+    return () => ctx.revert();
   }, []);
 
   useEffect(() => {
@@ -123,10 +100,10 @@ export function Hero({ contentReady = true }) {
     <section
       id="topo"
       ref={sectionRef}
-      className="relative flex h-[100svh] min-h-[560px] w-full items-end overflow-hidden bg-costa"
+      className="story-deck__panel relative flex h-[100svh] min-h-[560px] w-full items-end overflow-hidden bg-areia"
     >
-      <div ref={mediaRef} className="absolute inset-0 -top-[8%] h-[116%] w-full">
-        <div ref={mediaFrameRef} className="h-full w-full overflow-hidden">
+      <div className="absolute inset-0 -top-[8%] h-[116%] w-full">
+        <div ref={mediaFrameRef} className="h-full w-full overflow-hidden bg-areia">
           <video
             ref={videoRef}
             className="h-full w-full object-cover"
@@ -150,17 +127,21 @@ export function Hero({ contentReady = true }) {
         </div>
       </div>
 
-      <div className="relative z-10 w-full pb-16 pt-32 sm:pb-20 md:pb-24">
+      <div className="story-deck__surface relative z-10 w-full pb-16 pt-32 sm:pb-20 md:pb-24">
         <div className="mx-auto flex w-full max-w-container justify-end px-gutter">
-          <div className="ml-auto max-w-[60ch] text-right">
-            <div className="ml-auto w-full max-w-[38rem]">
+          <div ref={contentBlockRef} className="ml-auto w-full max-w-[72rem] text-right">
+            <div className="ml-auto w-full max-w-[38rem] lg:max-w-[50vw]">
               <h1
                 ref={headlineRef}
-                className="text-3 text-right text-mare sm:text-4 lg:text-[4.5rem]"
+                className="text-3 text-right text-inverse sm:text-4 lg:text-[4.5rem]"
                 style={{ opacity: 0 }}
               >
-                <span className="block">Seu imóvel, cuidado</span>
-                <span className="block">como uma experiência.</span>
+                <span className="block">
+                  Seu imóvel, <span className="hero__headline-highlight">cuidado</span>
+                </span>
+                <span className="block">
+                  como uma <span className="hero__headline-highlight">experiência</span>.
+                </span>
               </h1>
             </div>
             <p
@@ -185,15 +166,15 @@ export function Hero({ contentReady = true }) {
             </div>
           </div>
         </div>
-      </div>
 
-      <div
-        ref={indicatorRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-8 right-gutter hidden flex-col items-end gap-3 sm:flex"
-      >
-        <span className="text-[10px] tracking-nav text-inverse-muted">ROLE</span>
-        <span className="block h-10 w-px bg-border-inverse" />
+        <div
+          ref={indicatorRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-8 right-gutter hidden flex-col items-end gap-3 sm:flex"
+        >
+          <span className="text-[10px] tracking-nav text-inverse-muted">ROLE</span>
+          <span className="block h-10 w-px bg-border-inverse" />
+        </div>
       </div>
     </section>
   );

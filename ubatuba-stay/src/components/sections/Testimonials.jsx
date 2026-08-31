@@ -42,7 +42,7 @@ export function Testimonials() {
 
   return (
     <Section id="depoimentos">
-      <div ref={headingReveal} className="reveal max-w-[24ch]">
+      <div ref={headingReveal} className="reveal section-heading--half">
         <Eyebrow>Depoimentos</Eyebrow>
         <h2>A experiência de quem confia o imóvel à gente.</h2>
       </div>

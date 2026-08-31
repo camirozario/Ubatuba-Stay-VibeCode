@@ -148,7 +148,7 @@ export function OwnerPlatform() {
     <Section id="plataforma">
       <div ref={sectionRef} className="text-center">
         <Eyebrow className="mx-auto w-fit">Transparência</Eyebrow>
-        <h2 className="mx-auto max-w-[18ch]">Delegue a operação. Não a visibilidade.</h2>
+        <h2 className="mx-auto section-heading--half">Delegue a operação. Não a visibilidade.</h2>
         <p className="mx-auto mt-6 max-w-[56ch] text-1 text-text-secondary">
           Centralizamos a operação para que você acompanhe seu imóvel de forma simples,
           organizada e transparente — calendário, reservas, limpezas e informações financeiras

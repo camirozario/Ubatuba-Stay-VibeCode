@@ -19,7 +19,7 @@ export function FAQ() {
       <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div ref={headingReveal} className="reveal">
           <Eyebrow>Perguntas frequentes</Eyebrow>
-          <h2 className="max-w-[14ch]">Tire suas dúvidas antes de conversar com a gente.</h2>
+          <h2 className="section-title--column">Tire suas dúvidas antes de conversar com a gente.</h2>
         </div>
 
         <div ref={listReveal} className="reveal">

@@ -56,7 +56,7 @@ export function Principles() {
 
   return (
     <Section id="cuidado" bg="sand">
-      <div ref={headingReveal} className="reveal max-w-[26ch]">
+      <div ref={headingReveal} className="reveal section-heading--half">
         <Eyebrow>Nossa forma de cuidar</Eyebrow>
         <h2>Cuidar bem também significa olhar com atenção.</h2>
       </div>

@@ -9,6 +9,8 @@
  *   um link real, o componente de agendamento mostra um estado visual
  *   preparado para a integração, sem simular uma URL falsa.
  * - INSTAGRAM_URL / EMAIL: usados no rodapé e nos CTAs secundários.
+ * - OWNER_PLATFORM_URL: link externo da plataforma do proprietário. Se ficar
+ *   vazio, a navbar aponta para a seção interna "Plataforma" como fallback.
  */
 
 export const WHATSAPP_NUMBER = ''; // TODO: preencher, ex. "5512988887777"
@@ -20,6 +22,8 @@ export const INSTAGRAM_URL = 'https://instagram.com/ubatubastay'; // TODO: confi
 export const CONTACT_EMAIL = 'contato@ubatubastay.com.br'; // TODO: confirmar e-mail
 
 export const LOCATION_LABEL = 'Ubatuba — SP';
+
+export const OWNER_PLATFORM_URL = ''; // TODO: preencher, ex. "https://app.ubatubastay.com.br"
 
 /**
  * Monta um link do WhatsApp (wa.me) com mensagem pré-preenchida.

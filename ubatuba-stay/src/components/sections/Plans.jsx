@@ -52,7 +52,7 @@ export function Plans() {
 
   return (
     <Section id="planos" bg="sand">
-      <div ref={headingReveal} className="reveal max-w-[22ch]">
+      <div ref={headingReveal} className="reveal section-heading--half">
         <Eyebrow>Planos de gestão</Eyebrow>
         <h2>Uma gestão que se adapta ao seu imóvel.</h2>
       </div>

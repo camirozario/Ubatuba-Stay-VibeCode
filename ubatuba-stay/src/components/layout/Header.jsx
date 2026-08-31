@@ -4,6 +4,7 @@ import { BrandLockup } from '../ui/Logo';
 import { Button } from '../ui/Button';
 import { Container } from './Container';
 import { cn } from '../../utils/cn';
+import { OWNER_PLATFORM_URL } from '../../config/contact';
 
 const NAV_LINKS = [
   { href: '#servicos', label: 'Serviços' },
@@ -42,6 +43,10 @@ export function Header({ brandTargetRef = null, brandVisible = true }) {
   }, [menuOpen]);
 
   const overImage = !scrolled;
+  const platformHref = OWNER_PLATFORM_URL || '#plataforma';
+  const platformLinkProps = OWNER_PLATFORM_URL
+    ? { target: '_blank', rel: 'noreferrer noopener' }
+    : {};
 
   return (
     <header
@@ -78,9 +83,19 @@ export function Header({ brandTargetRef = null, brandVisible = true }) {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
           <Button href="#contato" variant={overImage ? 'secondary' : 'primary'} size="sm">
             Agendar uma conversa
+          </Button>
+          <Button
+            href={platformHref}
+            variant={overImage ? 'ghost-inverse' : 'ghost'}
+            size="sm"
+            className="header__platform-button"
+            {...platformLinkProps}
+          >
+            <span>Plataforma US</span>
+            <span className="btn__icon btn__icon--external" aria-hidden="true" />
           </Button>
         </div>
 
@@ -114,6 +129,16 @@ export function Header({ brandTargetRef = null, brandVisible = true }) {
             ))}
             <Button href="#contato" variant="primary" onClick={() => setMenuOpen(false)}>
               Agendar uma conversa
+            </Button>
+            <Button
+              href={platformHref}
+              variant="ghost"
+              onClick={() => setMenuOpen(false)}
+              className="header__platform-button justify-center"
+              {...platformLinkProps}
+            >
+              <span>Plataforma US</span>
+              <span className="btn__icon btn__icon--external" aria-hidden="true" />
             </Button>
           </nav>
         </div>

@@ -12,10 +12,22 @@ const BG = {
  * da alternância cream/sand/inverse e do container. `id` habilita a
  * navegação por âncora do header.
  */
-export function Section({ id, bg = 'cream', className = '', containerClassName = '', children, as: Component = 'section' }) {
+export function Section({
+  id,
+  bg = 'cream',
+  className = '',
+  containerClassName = '',
+  children,
+  as: Component = 'section',
+  scrollMode = 'snap',
+}) {
   return (
-    <Component id={id} className={cn('section', BG[bg], className)}>
-      <Container className={containerClassName}>{children}</Container>
+    <Component
+      id={id}
+      data-section-scroll-mode={scrollMode}
+      className={cn('section story-deck__panel', BG[bg], className)}
+    >
+      <Container className={cn('story-deck__surface', containerClassName)}>{children}</Container>
     </Component>
   );
 }
