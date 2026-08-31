@@ -60,6 +60,7 @@ export function Process() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const processRef = useRef(null);
+  const stepsListRef = useRef(null);
   const stepRefs = useRef([]);
   const activeIndexRef = useRef(0);
   const animationFrameRef = useRef(0);
@@ -75,6 +76,7 @@ export function Process() {
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return undefined;
 
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -84,7 +86,11 @@ export function Process() {
           }
         });
       },
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+      {
+        root: isDesktop ? null : stepsListRef.current,
+        rootMargin: isDesktop ? '-45% 0px -45% 0px' : '-34% 0px -34% 0px',
+        threshold: 0,
+      }
     );
 
     stepRefs.current.forEach((el) => el && observer.observe(el));
@@ -206,7 +212,10 @@ export function Process() {
           <Eyebrow>Como funciona</Eyebrow>
           <h2 className="max-w-[16ch]">Do primeiro encontro à primeira reserva.</h2>
 
-          <div className="mt-10 overflow-hidden rounded-md" style={{ aspectRatio: '4 / 5', maxWidth: 440 }}>
+          <div
+            className="process-image mt-10 overflow-hidden rounded-md"
+            style={{ aspectRatio: '4 / 5', maxWidth: 440 }}
+          >
             <img
               src={processImage.src}
               alt={processImage.alt}
@@ -222,7 +231,7 @@ export function Process() {
           </div>
         </div>
 
-        <ol className="lg:py-section-y">
+        <ol ref={stepsListRef} className="process-steps lg:py-section-y">
           {processSteps.map((step, index) => (
             <li
               key={step.number}
@@ -230,8 +239,9 @@ export function Process() {
                 stepRefs.current[index] = el;
               }}
               data-index={index}
+              data-process-active={index === activeIndex ? 'true' : 'false'}
               className={cn(
-                'border-t border-border py-9 pl-6 transition-colors first:border-t-0 lg:min-h-[42vh] lg:py-0 lg:pt-0',
+                'process-step border-t border-border py-9 pl-6 transition-colors first:border-t-0 lg:min-h-[42vh] lg:py-0 lg:pt-0',
                 'lg:flex lg:flex-col lg:justify-center'
               )}
               style={{

@@ -315,8 +315,6 @@
     position: relative;
     min-height: 100svh;
     isolation: isolate;
-    perspective: 1800px;
-    perspective-origin: 50% 50%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
@@ -325,7 +323,6 @@
     position: relative;
     transform: translate3d(0, 0, 0);
     transform-origin: 50% 50%;
-    transform-style: preserve-3d;
     opacity: 1;
   }
 
@@ -333,31 +330,151 @@
     will-change: transform, opacity;
     backface-visibility: hidden;
     transition:
-      transform 900ms cubic-bezier(0.76, 0, 0.24, 1),
-      opacity 760ms cubic-bezier(0.76, 0, 0.24, 1);
+      transform 720ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 620ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface {
-    transform: translate3d(0, -34px, 0) scale(0.986) rotateX(-10deg);
-    opacity: 0.58;
+    transform: translate3d(0, -46px, 0) scale(0.96);
+    opacity: 0.5;
   }
 
   body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface {
-    transform: translate3d(0, 30px, 0) scale(0.988) rotateX(10deg);
-    opacity: 0.64;
+    transform: translate3d(0, 42px, 0) scale(0.965);
+    opacity: 0.56;
   }
 
   body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface {
-    animation: story-deck-enter-from-below 900ms cubic-bezier(0.76, 0, 0.24, 1) both;
+    animation: story-deck-enter-from-below 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface {
-    animation: story-deck-enter-from-above 900ms cubic-bezier(0.76, 0, 0.24, 1) both;
+    animation: story-deck-enter-from-above 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Parallax leve nos "objetos" (fotos/vídeo) de cada seção: como não
+     recebem o transform do .story-deck__surface pai, se deslocam num ritmo
+     ligeiramente diferente do texto durante a transição, criando profundidade. */
+  body.homepage-snap--enhanced .story-deck__surface img,
+  body.homepage-snap--enhanced .story-deck__surface video {
+    will-change: transform;
+    transition: transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface img,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface video {
+    transform: translate3d(0, -22px, 0) scale(1.035);
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface img,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface video {
+    transform: translate3d(0, 20px, 0) scale(1.035);
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface img,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface video {
+    animation: story-deck-parallax-enter-from-below 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface img,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface video {
+    animation: story-deck-parallax-enter-from-above 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Hierarquia visual fluida: eyebrow, título, texto e CTA se deslocam e
+     revelam em cascata (cada camada com seu próprio delay), em vez de
+     a seção inteira se mover como um bloco rígido só. */
+  body.homepage-snap--enhanced .story-deck__surface .eyebrow,
+  body.homepage-snap--enhanced .story-deck__surface h1,
+  body.homepage-snap--enhanced .story-deck__surface h2,
+  body.homepage-snap--enhanced .story-deck__surface h3,
+  body.homepage-snap--enhanced .story-deck__surface p,
+  body.homepage-snap--enhanced .story-deck__surface .btn {
+    will-change: transform, opacity;
+    transition:
+      transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  body.homepage-snap--enhanced .story-deck__surface h1,
+  body.homepage-snap--enhanced .story-deck__surface h2,
+  body.homepage-snap--enhanced .story-deck__surface h3 {
+    transition-delay: 20ms;
+  }
+
+  body.homepage-snap--enhanced .story-deck__surface p {
+    transition-delay: 40ms;
+  }
+
+  body.homepage-snap--enhanced .story-deck__surface .btn {
+    transition-delay: 60ms;
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface .eyebrow,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface h1,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface h2,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface h3,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface p,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='down'] .story-deck__surface .btn {
+    transform: translate3d(0, -16px, 0);
+    opacity: 0;
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface .eyebrow,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface h1,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface h2,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface h3,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface p,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='leaving'][data-section-transition-direction='up'] .story-deck__surface .btn {
+    transform: translate3d(0, 16px, 0);
+    opacity: 0;
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface .eyebrow {
+    animation: story-deck-stagger-in-from-below 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface h1,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface h2,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface h3 {
+    animation: story-deck-stagger-in-from-below 620ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+  }
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface p {
+    animation: story-deck-stagger-in-from-below 620ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  }
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='down'] .story-deck__surface .btn {
+    animation: story-deck-stagger-in-from-below 620ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
+  }
+
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface .eyebrow {
+    animation: story-deck-stagger-in-from-above 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface h1,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface h2,
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface h3 {
+    animation: story-deck-stagger-in-from-above 620ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+  }
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface p {
+    animation: story-deck-stagger-in-from-above 620ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  }
+  body.homepage-snap--enhanced .story-deck__panel[data-section-transition='entering'][data-section-transition-direction='up'] .story-deck__surface .btn {
+    animation: story-deck-stagger-in-from-above 620ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
   }
 
   .section--sand {
     background: var(--bg-alt);
   }
+
+  @media (min-width: 1024px) and (max-height: 939px) and (hover: hover) and (pointer: fine) {
+    .photography-viewport {
+      height: 100svh;
+    }
+
+    .photography-frame,
+    .photography-track {
+      will-change: transform;
+    }
+  }
+
   .section--inverse {
     background: var(--bg-inverse);
     color: var(--on-inverse-secondary);
@@ -565,14 +682,20 @@
   }
 
   .services-progress {
+    position: relative;
+    z-index: 3;
     margin-top: clamp(1.25rem, 2vw, 1.75rem);
+    width: min(12rem, 28vw);
+    min-width: 7rem;
+    cursor: ew-resize;
+    pointer-events: auto;
+    touch-action: none;
   }
 
   .services-progress__track {
     position: relative;
     display: block;
-    width: min(12rem, 28vw);
-    min-width: 7rem;
+    width: 100%;
     height: 3px;
     background: rgba(31, 78, 95, 0.14);
     overflow: hidden;
@@ -589,17 +712,39 @@
     transition: transform 860ms cubic-bezier(0.76, 0, 0.24, 1);
   }
 
+  .services-progress[data-dragging='true'] .services-progress__thumb {
+    transition: none;
+  }
+
   .services-stage {
     position: relative;
     display: flex;
     gap: var(--space-4);
+    margin-inline: calc(var(--gutter) * -1);
     overflow-x: auto;
+    padding-inline: var(--gutter);
     padding-bottom: var(--space-2);
+    scroll-padding-inline: var(--gutter);
     scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .services-panel {
+    display: flex;
+    flex-direction: column;
+    width: min(76vw, 26rem);
     scroll-snap-stop: always;
+    opacity: 0.36;
+    transform: scale(0.96);
+    transition:
+      opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .services-panel[data-service-active='true'] {
+    opacity: 1;
+    transform: scale(1);
   }
 
   .services-panel__body {
@@ -607,12 +752,53 @@
   }
 
   .services-panel__image {
-    margin-top: clamp(1rem, 3vw, 1.5rem);
+    order: -1;
+    margin-top: 0;
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
   }
 
   .services-panel__media {
     width: 100%;
     height: auto;
+  }
+
+  @media (max-width: 1023px) {
+    #processo .process-image {
+      display: none;
+    }
+
+    #processo .process-steps {
+      height: clamp(23rem, 58svh, 34rem);
+      overflow-y: auto;
+      padding-block: 22%;
+      scroll-snap-type: y mandatory;
+      overscroll-behavior-y: contain;
+      scrollbar-width: none;
+      touch-action: pan-y;
+    }
+
+    #processo .process-steps::-webkit-scrollbar {
+      display: none;
+    }
+
+    #processo .process-step {
+      display: flex;
+      min-height: 56%;
+      flex-direction: column;
+      justify-content: center;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      opacity: 0.28;
+      transform: scale(0.96);
+      transition:
+        opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #processo .process-step[data-process-active='true'] {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   @media (min-width: 1024px) {
@@ -677,6 +863,8 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding-bottom: 0;
+      padding-inline: 0;
+      margin-inline: 0;
       scroll-snap-type: x mandatory;
       overscroll-behavior: contain;
     }
@@ -694,6 +882,8 @@
       column-gap: clamp(1.5rem, 2.4vw, 2.75rem);
       padding: clamp(0.875rem, 1.3vw, 1.25rem);
       padding-inline: clamp(1rem, 1.8vw, 1.75rem);
+      opacity: 1;
+      transform: none;
     }
 
     .services-panel__body {
@@ -707,8 +897,10 @@
     .services-panel__image {
       grid-column: 2;
       grid-row: 1;
+      order: 0;
       width: 100%;
       margin-top: 0;
+      margin-bottom: 0;
     }
 
     .services-panel__image,
@@ -1207,8 +1399,8 @@
 
 @keyframes story-deck-enter-from-below {
   from {
-    transform: translate3d(0, 64px, 0) scale(0.974) rotateX(14deg);
-    opacity: 0.18;
+    transform: translate3d(0, 80px, 0) scale(0.94);
+    opacity: 0.12;
   }
   to {
     transform: translate3d(0, 0, 0);
@@ -1218,12 +1410,52 @@
 
 @keyframes story-deck-enter-from-above {
   from {
-    transform: translate3d(0, -58px, 0) scale(0.978) rotateX(-14deg);
-    opacity: 0.2;
+    transform: translate3d(0, -72px, 0) scale(0.945);
+    opacity: 0.14;
   }
   to {
     transform: translate3d(0, 0, 0);
     opacity: 1;
+  }
+}
+
+@keyframes story-deck-stagger-in-from-below {
+  from {
+    transform: translate3d(0, 26px, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes story-deck-stagger-in-from-above {
+  from {
+    transform: translate3d(0, -24px, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes story-deck-parallax-enter-from-below {
+  from {
+    transform: translate3d(0, 34px, 0) scale(1.04);
+  }
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes story-deck-parallax-enter-from-above {
+  from {
+    transform: translate3d(0, -30px, 0) scale(1.04);
+  }
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 

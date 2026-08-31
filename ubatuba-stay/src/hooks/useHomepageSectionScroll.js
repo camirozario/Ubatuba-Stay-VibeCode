@@ -4,11 +4,11 @@ import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 const DESKTOP_MEDIA_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fine)';
 const TALL_DESKTOP_MEDIA_QUERY =
   '(min-width: 1024px) and (min-height: 940px) and (hover: hover) and (pointer: fine)';
-const SECTION_SCROLL_DURATION_MS = 900;
-const SECTION_SCROLL_COOLDOWN_MS = 140;
+const SECTION_SCROLL_DURATION_MS = 560;
+const SECTION_SCROLL_COOLDOWN_MS = 60;
 const WHEEL_DELTA_THRESHOLD = 10;
-const WHEEL_GESTURE_THRESHOLD = 56;
-const WHEEL_GESTURE_RESET_MS = 180;
+const WHEEL_GESTURE_THRESHOLD = 40;
+const WHEEL_GESTURE_RESET_MS = 160;
 const SECTION_BOUNDARY_THRESHOLD = 24;
 const SECTION_OVERFLOW_TOLERANCE = 96;
 const SECTION_OVERFLOW_RATIO = 0.18;
@@ -69,7 +69,7 @@ function createBezierEasing(x1, y1, x2, y2) {
   };
 }
 
-const EDITORIAL_EASE = createBezierEasing(0.76, 0, 0.24, 1);
+const EDITORIAL_EASE = createBezierEasing(0.22, 1, 0.36, 1);
 
 function getSectionTop(section) {
   return section.getBoundingClientRect().top + window.scrollY;

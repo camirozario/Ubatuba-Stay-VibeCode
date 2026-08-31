@@ -64,7 +64,7 @@ export function Philosophy() {
     <Section
       id="sobre"
       bg="sand"
-      className="relative z-10 overflow-visible py-0"
+      className="relative z-10 hidden overflow-visible py-0 lg:block"
       containerClassName="flex min-h-[100svh] items-center justify-center"
     >
       <div className="philosophy-transition-target w-full text-center">

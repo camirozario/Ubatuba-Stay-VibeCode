@@ -2,6 +2,12 @@ import gestaoCoHostingImg from '../assets/images/services/gestao-cohosting.jpg';
 import imagemApresentacaoImg from '../assets/images/services/imagem-apresentacao.jpg';
 import operacaoExperienciaImg from '../assets/images/services/operacao-experiencia.jpg';
 import preparacaoImovelImg from '../assets/images/services/preparacao-imovel.jpg';
+import cozinhaMadeiraImg from '../assets/images/photography/cozinha-madeira.jpg';
+import cozinhaJantarImg from '../assets/images/photography/cozinha-jantar.jpg';
+import salaEntardecerImg from '../assets/images/photography/sala-entardecer.jpg';
+import vistaMarImg from '../assets/images/photography/vista-mar.jpg';
+import casaPiscinaImg from '../assets/images/photography/casa-piscina.jpg';
+import casaPraiaImg from '../assets/images/photography/casa-praia.jpg';
 
 /**
  * Banco central de imagens da landing page.
@@ -53,12 +59,12 @@ export const serviceImages = {
 
 /** Galeria de fotografia - usada na secao 04, com scroll horizontal. */
 export const galleryImages = [
-  { src: picsum('ubatuba-galeria-1', 1600, 1100), alt: 'PLACEHOLDER - sala de estar com vista para o mar.' },
-  { src: picsum('ubatuba-galeria-2', 1600, 1100), alt: 'PLACEHOLDER - suite com luz natural ao amanhecer.' },
-  { src: picsum('ubatuba-galeria-3', 1600, 1100), alt: 'PLACEHOLDER - varanda com rede e vegetacao nativa.' },
-  { src: picsum('ubatuba-galeria-4', 1600, 1100), alt: 'PLACEHOLDER - piscina do imovel ao entardecer.' },
-  { src: picsum('ubatuba-galeria-5', 1600, 1100), alt: 'PLACEHOLDER - cozinha integrada, estilo editorial.' },
-  { src: picsum('ubatuba-galeria-6', 1600, 1100), alt: 'PLACEHOLDER - detalhe de acabamento em madeira e pedra.' },
+  { src: cozinhaMadeiraImg, alt: 'Cozinha ampla com marcenaria em madeira e ilha central.' },
+  { src: cozinhaJantarImg, alt: 'Cozinha integrada a sala de jantar, preparada para receber.' },
+  { src: salaEntardecerImg, alt: 'Sala de estar iluminada pelo sol do fim de tarde.' },
+  { src: vistaMarImg, alt: 'Vista para o mar atravessando arcos de uma casa costeira.' },
+  { src: casaPiscinaImg, alt: 'Casa de temporada com piscina e area externa arborizada.' },
+  { src: casaPraiaImg, alt: 'Casa contemporanea de frente para a praia.' },
 ];
 
 export const processImage = {
