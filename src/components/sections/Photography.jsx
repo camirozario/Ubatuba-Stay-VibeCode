@@ -278,13 +278,13 @@ export function Photography() {
             <div className="mx-auto w-full max-w-container px-gutter lg:pt-4">
               <Eyebrow inverse>Fotografia profissional</Eyebrow>
               <h2 className="section-heading--half section-title--white">
-                A primeira experiÃªncia acontece antes da reserva.
+                A primeira experiência acontece antes da reserva.
               </h2>
               <p className="mt-6 max-w-[56ch] text-1 text-inverse-secondary">
-                NÃ£o Ã© sÃ³ produzir fotografias bonitas â€” Ã© apresentar corretamente os ambientes,
-                valorizar os diferenciais do imÃ³vel e construir uma apresentaÃ§Ã£o coerente para as
+                Não é só produzir fotografias bonitas — é apresentar corretamente os ambientes,
+                valorizar os diferenciais do imóvel e construir uma apresentação coerente para as
                 plataformas de hospedagem. Pode ser contratada individualmente ou como parte da
-                preparaÃ§Ã£o inicial do imÃ³vel.
+                preparação inicial do imóvel.
               </p>
             </div>
 

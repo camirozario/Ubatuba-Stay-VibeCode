@@ -486,11 +486,11 @@ export function Services() {
               onClick={handleProgressClick}
               role="slider"
               tabIndex={0}
-              aria-label="Navegar entre serviÃ§os"
+              aria-label="Navegar entre serviços"
               aria-valuemin={1}
               aria-valuemax={services.length}
               aria-valuenow={activeIndex + 1}
-              aria-valuetext={`ServiÃ§o ${activeIndex + 1} de ${services.length}`}
+              aria-valuetext={`Serviço ${activeIndex + 1} de ${services.length}`}
             >
               <span className="services-progress__track">
                 <span
