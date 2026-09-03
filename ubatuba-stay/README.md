@@ -1,105 +1,69 @@
-# Ubatuba Stay — Landing Page
+# Ubatuba Stay
 
-Landing page em React + Vite + Tailwind CSS para a Ubatuba Stay, gestão de imóveis por
-temporada e co-hosting em Ubatuba/SP. Construída em cima do Design System fornecido
-(`ubatuba-stay-tokens.css`), sem introduzir cores, fontes ou espaçamentos novos.
+<p align="center">
+  <img src="src/assets/logo/UbatubaStay_logo.png" alt="Logo da Ubatuba Stay" width="260" />
+</p>
 
-## Rodando o projeto
+<p align="center">
+  <img src="https://img.shields.io/badge/status-em%20desenvolvimento-dc2626?style=flat-square" alt="Projeto em desenvolvimento" />
+</p>
+
+> **Projeto em desenvolvimento.** Esta landing page continua em evolução visual, técnica e de conteúdo.
+
+## Sobre o projeto
+
+A Ubatuba Stay é uma marca pessoal criada para apresentar uma forma cuidadosa e contemporânea de gerir imóveis por temporada e co-hosting em Ubatuba, SP. O projeto transforma essa proposta em uma experiência digital acolhedora, clara e centrada na confiança.
+
+O site foi produzido inteiramente com **vibe coding**: uma construção guiada por direção criativa, iteração rápida, experimentação visual e colaboração com ferramentas de inteligência artificial.
+
+## Identidade visual
+
+O logo nasce do encontro entre três referências: a espontaneidade de um traço **hand-drawn**, a exploração assistida por **IA** e o refinamento manual de vetores no **Adobe Illustrator**. A linha orgânica remete ao movimento das ondas e ao contorno da costa; o círculo coral sugere o sol e traz um ponto de calor à paleta.
+
+O resultado busca equilibrar a imperfeição expressiva do desenho manual com uma composição limpa e sofisticada, alinhada ao território, ao mar e à hospitalidade da marca.
+
+## Tecnologias
+
+- React 18
+- Vite
+- JavaScript
+- Tailwind CSS
+- GSAP e ScrollTrigger
+- Lucide React
+- CSS custom properties para os tokens do design system
+
+## Processo de desenvolvimento
+
+O trabalho foi organizado nesta sequência para manter a exploração criativa conectada a decisões de produto e implementação:
+
+1. **Mockup inicial no Figma**: definição de uma estrutura básica, hierarquia de conteúdo e primeiras referências visuais.
+2. **Escolha da stack**: definição das tecnologias adequadas para uma landing page rápida, responsiva e com bom controle de animações.
+3. **Design system com IA**: geração e refinamento de tokens, componentes e diretrizes visuais com apoio de ferramentas de inteligência artificial.
+4. **Primeiro mockup funcional**: tradução do direcionamento visual para uma interface real em React.
+5. **Revisão de UI e UX**: evolução da experiência por meio de prompts e programação manual, com adição de efeitos dinâmicos, ajustes de interação e melhorias de navegação.
+
+## Como executar
 
 ```bash
 npm install
 npm run dev
 ```
 
-Build de produção:
+Para gerar a versão de produção:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Stack
+## Estrutura principal
 
-React 18 + Vite + JavaScript (sem TypeScript, sem Next.js) + Tailwind CSS + GSAP/ScrollTrigger
-para as animações de scroll mais elaboradas (parallax do hero, galeria horizontal fixada,
-reveal do mockup da plataforma). Ícones: `lucide-react`. Sem Lenis — o scroll nativo com
-`scroll-behavior: smooth` já atende bem, e menos uma dependência é menos superfície de bug.
-
-## O que ainda precisa ser substituído antes de publicar
-
-Tudo abaixo está claramente sinalizado no código (comentários `PLACEHOLDER` / `TODO`):
-
-1. **Fotografias reais** — `src/data/images.js`. Hoje usa imagens do Lorem Picsum (banco de
-   imagens público, só para preencher o layout com proporções e qualidade corretas). Troque
-   cada `src` por um `import` de arquivo em `src/assets/images/` quando as fotos da Ubatuba
-   Stay estiverem disponíveis. Os textos `alt` já descrevem o que cada imagem deveria mostrar.
-2. **Depoimentos** — `src/data/testimonials.js`. Três placeholders estruturais (não são
-   depoimentos reais — não invente nomes, textos ou avaliações). Substitua pelo conteúdo real,
-   com autorização do proprietário, e remova `isPlaceholder`.
-3. **WhatsApp** — `src/config/contact.js`, constante `WHATSAPP_NUMBER`. Enquanto vazia, os
-   botões de WhatsApp ficam desabilitados (em vez de apontar para um link quebrado).
-4. **Agendamento (Calendly ou similar)** — `src/config/contact.js`, constante `CALENDLY_URL`.
-   Enquanto vazia, a seção de contato mostra um estado visual preparado para a integração, sem
-   simular um agendamento que não existe. Ao preencher a URL, o widget passa a ser renderizado
-   automaticamente em `src/components/sections/Contact.jsx`.
-5. **Instagram / e-mail** — também em `src/config/contact.js`.
-6. **Mockup da plataforma do proprietário** — `src/components/sections/OwnerPlatform.jsx`
-   contém um mockup construído em HTML/CSS (não é uma captura de tela real), representando de
-   forma abstrata calendário, reservas e indicadores. Substitua pelo componente
-   `PlatformMockup` por capturas de tela reais da plataforma quando disponíveis.
-7. **SEO** — `index.html`: preencha `og:image` (1200×630) com uma imagem real e confirme a URL
-   canônica quando o domínio definitivo estiver definido.
-8. **Favicon** — `public/favicon.svg` usa o mark (linha + círculo coral) extraído do Design
-   System. Se houver uma versão oficial do símbolo em SVG, substitua este arquivo.
-
-## Estrutura
-
-```
+```text
 src/
-├── assets/            # imagens, ícones e logo locais (vazio até a fotografia real entrar)
-├── components/
-│   ├── layout/         # Header, Footer, Container, Section
-│   ├── ui/              # Button, Eyebrow, Logo, Media, AccordionItem, WhatsAppLink…
-│   └── sections/        # uma seção da landing page por arquivo (Hero, Services, FAQ…)
-├── config/
-│   └── contact.js       # WHATSAPP_NUMBER, CALENDLY_URL, Instagram, e-mail
-├── data/                # conteúdo estruturado: services, plans, testimonials, faq, process, images
-├── hooks/               # usePrefersReducedMotion, useScrollReveal
-├── utils/               # cn (classnames), gsapSetup (registro único do ScrollTrigger)
-├── App.jsx
-├── main.jsx
-└── index.css            # tokens do Design System (:root) + classes base (.btn, .eyebrow…)
+  assets/        # fontes, imagens e logo
+  components/    # elementos de interface e seções da página
+  config/        # configurações de contato
+  data/          # conteúdos estruturados da landing page
+  hooks/         # hooks de navegação e animação
+  utils/         # utilitários compartilhados
 ```
-
-## Sobre o Design System
-
-`tailwind.config.js` não define cores/tipografia/espaçamento com valores próprios — ele aponta
-cada token para a variável CSS correspondente definida em `src/index.css` (ex.:
-`colors.costa: 'var(--ub-costa)'`). Isso significa que **a fonte de verdade é sempre
-`src/index.css`**; para ajustar uma cor ou espaçamento em todo o site, o ajuste é feito lá, uma
-única vez.
-
-Componentes de baixo nível do Design System (botões, badges, campos de formulário, linhas de
-especificação, navegação, accordion) foram portados como classes utilitárias em
-`@layer components` dentro de `src/index.css`, para poder reutilizar exatamente as mesmas
-classes (`.btn--primary`, `.eyebrow`, `.spec-row`, `.numeral`, `.quote`…) descritas no Design
-System, junto com o Tailwind para layout e composição.
-
-## Motion
-
-Todas as animações de scroll mais elaboradas (parallax do hero, reveal em estágios na entrada,
-galeria horizontal fixada, reveal do mockup da plataforma) usam GSAP + ScrollTrigger, isoladas
-em cada seção. Microinterações simples (hover, underline, transições de cor/opacidade) usam
-apenas CSS/Tailwind. Tudo respeita `prefers-reduced-motion`: as durações de transição caem para
-`0ms` via CSS (`src/index.css`) e as animações GSAP são puladas nos componentes que as usam
-(`Hero`, `Photography`, `OwnerPlatform`) checando o hook `usePrefersReducedMotion` / helper
-`prefersReducedMotion()`.
-
-## Nota sobre este ambiente de desenvolvimento
-
-Este projeto foi escrito e revisado de forma que `npm install && npm run dev` funcione
-normalmente na sua máquina. A verificação de sintaxe e de montagem em tempo de execução (React
-renderizando sem erros, todas as 11 seções presentes, accordion, menu mobile e header
-respondendo a interação) foi feita com `esbuild` e Playwright localmente, simulando `gsap` e
-`lucide-react`; não foi possível rodar `npm install` real dentro do ambiente de geração deste
-código por restrição de rede do sandbox — isso não afeta a instalação normal no seu computador.
