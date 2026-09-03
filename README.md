@@ -12,7 +12,7 @@
 
 ## Sobre o projeto
 
-A Ubatuba Stay é uma marca pessoal criada para apresentar uma forma cuidadosa e contemporânea de gerir imóveis por temporada e co-hosting em Ubatuba, SP. O projeto transforma essa proposta em uma experiência digital acolhedora, clara e centrada na confiança.
+A Ubatuba Stay é uma marca criada para apresentar uma forma cuidadosa e contemporânea de gerir imóveis por temporada e co-hosting em Ubatuba, SP. O projeto transforma essa proposta em uma experiência digital acolhedora, clara e centrada na confiança.
 
 O site foi produzido inteiramente com **vibe coding**: uma construção guiada por direção criativa, iteração rápida, experimentação visual e colaboração com ferramentas de inteligência artificial.
 
