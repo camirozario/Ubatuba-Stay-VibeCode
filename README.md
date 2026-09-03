@@ -8,6 +8,10 @@
   <img src="https://img.shields.io/badge/status-em%20desenvolvimento-dc2626?style=flat-square" alt="Projeto em desenvolvimento" />
 </p>
 
+<p align="center">
+[Live Preview](https://camirozario.github.io/VibeCode-Ubatuba-Stay/)
+</p>
+
 > **Projeto em desenvolvimento.** Esta landing page continua em evolução visual, técnica e de conteúdo.
 
 ## Sobre o projeto
@@ -28,9 +32,6 @@ O resultado busca equilibrar a imperfeição expressiva do desenho manual com um
 - Vite
 - JavaScript
 - Tailwind CSS
-- GSAP e ScrollTrigger
-- Lucide React
-- CSS custom properties para os tokens do design system
 
 ## Processo de desenvolvimento
 
