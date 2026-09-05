@@ -1016,8 +1016,8 @@
 
   .btn__icon--external {
     background-color: currentColor;
-    -webkit-mask: url('../icons/external-link.png') center / contain no-repeat;
-    mask: url('../icons/external-link.png') center / contain no-repeat;
+    -webkit-mask: url('/icons/external-link.png') center / contain no-repeat;
+    mask: url('/icons/external-link.png') center / contain no-repeat;
   }
 
   .link-arrow {

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-[Live Preview](https://camirozario.github.io/VibeCode-Ubatuba-Stay/)
+  <a href="https://camirozario.github.io/Ubatuba-Stay-VibeCode/">Live Preview</a>
 </p>
 
 > **Projeto em desenvolvimento.** Esta landing page continua em evolução visual, técnica e de conteúdo.
@@ -56,6 +56,17 @@ Para gerar a versão de produção:
 npm run build
 npm run preview
 ```
+
+## Publicação no GitHub Pages
+
+Em **Settings → Pages → Build and deployment**, mantenha **Source: GitHub Actions**.
+O workflow em `.github/workflows/deploy.yml` instala as dependências, executa `npm run build`
+e publica a pasta `dist` a cada push em `main`.
+
+Não selecione a publicação direta da raiz de `main`: ela serve o código-fonte React,
+que precisa ser compilado pelo Vite antes de funcionar no navegador.
+Os caminhos de assets são relativos para que a publicação continue funcionando mesmo
+se o repositório for renomeado.
 
 ## Estrutura principal
 
