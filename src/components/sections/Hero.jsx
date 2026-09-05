@@ -114,7 +114,7 @@ export function Hero({ contentReady = true }) {
             preload="auto"
             aria-hidden="true"
           >
-            <source src="/hero-video.mp4" type="video/mp4" />
+            <source src={`${import.meta.env.BASE_URL}hero-video.mp4`} type="video/mp4" />
           </video>
           <div
             className="absolute inset-0"
